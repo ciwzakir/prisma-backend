@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String
+  userRole  String
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  posts     Post[]
+  profile   Profile?
+  Product   Product[]
+
+  @@map("users")
+}
+
+model Profile {
+  id        Int         @id @default(autoincrement())
+  userId    Int         @unique
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now())
+  biodata   Biofeature?
+
+  @@map("profiles")
+}
+
+model Biofeature {
+  id                      Int                           @id @default(autoincrement())
+  bioId                   Int                           @unique
+  bio                     Profile                       @relation(fields: [bioId], references: [id])
+  createdAt               DateTime                      @default(now())
+  updatedAt               DateTime                      @default(now())
+  userName                UserName?
+  userAddress             UserAddress?
+  educationQualifications UserEducationQualifications[]
+  personalInformation     PersonalInformation?
+
+  @@map("biofeature")
+}
+
+model UserName {
+  id         Int        @id @default(autoincrement())
+  firstName  String
+  middleName String
+  lastName   String
+  nameId     Int        @unique
+  name       Biofeature @relation(fields: [nameId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now())
+
+  @@map("fullname")
+}
+
+model UserAddress {
+  id        Int        @id @default(autoincrement())
+  street    String
+  city      String
+  zipCode   String
+  addressId Int        @unique
+  address   Biofeature @relation(fields: [addressId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+
+  @@map("address")
+}
+
+model UserEducationQualifications {
+  id             Int        @id @default(autoincrement())
+  qualification  String
+  fieldOfStudy   String
+  instituteName  String
+  graduationYear Int
+  obtainGrade    String
+  educationId    Int
+  education      Biofeature @relation(fields: [educationId], references: [id])
+
+  @@map("qualifications")
+}
+
+model PersonalInformation {
+  id             Int        @id @default(autoincrement())
+  age            String
+  gender         String
+  maritalStatus  String
+  nationality    String
+  phoneNumber    String
+  bloodGroup     String
+  personalInfoId Int        @unique
+  personalInfo   Biofeature @relation(fields: [personalInfoId], references: [id])
+
+  @@map("personalInformations")
+}
+
+model PostCategory {
+  id          String @id @default(uuid())
+  name        String @unique
+  description String
+  posts       Post[]
+
+  @@map("postscategories")
+}
+
+model Post {
+  id           Int          @id @default(autoincrement())
+  title        String
+  content      String
+  postCategory PostCategory @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  author       User         @relation(fields: [authorId], references: [id])
+  authorId     Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+  isPublished  Boolean      @default(false)
+
+  @@map("posts")
+}
+
+model ProductCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  products    Product[]
+
+  @@map("productcategories")
+}
+
+model ProductBrand {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  products    Product[]
+
+  @@map("productbrands")
+}
+
+model ProductSupplier {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  products    Product[]
+
+  @@map("productsuppliers")
+}
+
+model Product {
+  id                     String          @id @default(uuid())
+  title                  String
+  productImageUrl        String
+  description            String
+  color                  String
+  size                   String
+  price                  Float
+  discount               Float?
+  warranty               Int
+  stockStatus            Boolean?        @default(true)
+  productCategory        ProductCategory @relation(fields: [productCategoryId], references: [id])
+  productCategoryId      String
+  productBrand           ProductBrand    @relation(fields: [productBrandId], references: [id])
+  productBrandId         String
+  productSupplier        ProductSupplier @relation(fields: [productSupplierId], references: [id])
+  productSupplierId      String
+  author                 User            @relation(fields: [authorId], references: [id])
+  authorId               Int
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  isPublished            Boolean?        @default(false)
+  paymentStatus          String?
+  salesStatus            String?
+  isItemSupplierVerified Boolean?        @default(true)
+  productRating          ProductRating[]
+  productReview          ProductReview[]
+
+  @@map("products")
+}
+
+model ProductRating {
+  id               String  @id @default(uuid())
+  rating           Int
+  productRating    Product @relation(fields: [productRatingsId], references: [id])
+  productRatingsId String
+
+  @@map("productratings")
+}
+
+model ProductReview {
+  id              String  @id @default(uuid())
+  review          String
+  productReview   Product @relation(fields: [productReviewId], references: [id])
+  productReviewId String
+
+  @@map("productreviews")
+}
