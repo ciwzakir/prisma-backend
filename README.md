@@ -10,8 +10,8 @@ Github Server side Link [Click Here](")
   - Prisma
 
 - Used Email& Pass
-
-  - zenithciw@gmail.com
+- password : s33rSV1ePitVm3MwG
+- zenithciw@gmail.com
 
 - Add Script
   - DATABASE_URL='postgres://postgres.chnahvkkfetghcrtggaq:s33rSV1ePitVm3MwG@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
@@ -24,3 +24,8 @@ Github Server side Link [Click Here](")
 - Deployment Command
   - yarn global add vercel
   - vercel --prod
+  - y
+  - scope
+  - Link to existing project? n
+  - Project Name? Graphbackend
+  - In which directory is your code located? ./
