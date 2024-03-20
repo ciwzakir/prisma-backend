@@ -29,3 +29,12 @@ Github Server side Link [Click Here](")
   - Link to existing project? n
   - Project Name? Graphbackend
   - In which directory is your code located? ./
+
+"""
+// "builds": [
+// {
+// "src": "dist/server.js",
+// "use": "@vercel/node"
+// }
+// ],
+""""
