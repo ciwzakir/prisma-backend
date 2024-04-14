@@ -7,7 +7,6 @@ dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 export default {
   bycrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
-  port: process.env.PORT,
   jwts: {
     secret: process.env.JWT_SECRET,
     expires_in: process.env.JWT_EXPIRES_IN,
