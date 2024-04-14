@@ -7,7 +7,6 @@ import { IContext } from "./gql/interface";
 import { jwthelpers } from "./gql/utils/jwthelpers";
 
 export const prisma = new PrismaClient();
-const port = Number(process.env.PORT || 4000);
 
 const main = async () => {
   const server = new ApolloServer({
@@ -16,18 +15,18 @@ const main = async () => {
   });
 
   const { url } = await startStandaloneServer(server, {
-    listen: { port },
+    listen: { port: 4000 },
     context: async ({ req }): Promise<IContext> => {
       const userInfo = await jwthelpers.getDataFromToken(
         req.headers.authorization as string
       );
+      // console.log("user Info  from main File", userInfo);
       return {
         prisma,
         userInfo,
       };
     },
   });
-  console.log(` Server ready at: ${url}`);
+  console.log(`🚀  Server ready at: ${url}`);
 };
-
 main();

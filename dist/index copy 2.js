@@ -17,22 +17,22 @@ const resolvers_1 = require("./gql/resolvers");
 const client_1 = require("@prisma/client");
 const jwthelpers_1 = require("./gql/utils/jwthelpers");
 exports.prisma = new client_1.PrismaClient();
-const port = Number(process.env.PORT || 4000);
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const server = new server_1.ApolloServer({
         typeDefs: schema_1.typeDefs,
         resolvers: resolvers_1.resolvers,
     });
     const { url } = yield (0, standalone_1.startStandaloneServer)(server, {
-        listen: { port },
+        listen: { port: 4000 },
         context: ({ req }) => __awaiter(void 0, void 0, void 0, function* () {
             const userInfo = yield jwthelpers_1.jwthelpers.getDataFromToken(req.headers.authorization);
+            // console.log("user Info  from main File", userInfo);
             return {
                 prisma: exports.prisma,
                 userInfo,
             };
         }),
     });
-    console.log(` Server ready at: ${url}`);
+    console.log(`🚀  Server ready at: ${url}`);
 });
 main();
